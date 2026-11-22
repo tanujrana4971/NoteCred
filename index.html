@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoteCred — Student Academic Resource & Project Sharing Platform</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand" onclick="switchView('dashboard')">
+        <div class="brand-logo">N</div>
+        <div>
+          <h1 class="brand-title">Note<span>Cred</span></h1>
+          <p class="brand-tag">Share | Learn | Grow</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu" id="navMenu">
+        <button class="nav-item active" data-view="dashboard">🏠 Dashboard</button>
+        <button class="nav-item" data-view="my-notes">📚 My Notes</button>
+        <button class="nav-item" data-view="upload">⬆️ Upload Notes</button>
+        <button class="nav-item" data-view="explore">🔍 Explore</button>
+        <button class="nav-item" data-view="saved">🔖 Saved</button>
+        <button class="nav-item" data-view="requests">🙋 Note Requests</button>
+        <button class="nav-item" data-view="projects">🚀 Projects</button>
+        <button class="nav-item" data-view="guidance">🎓 Senior Guidance</button>
+        <button class="nav-item" data-view="about">ℹ️ About</button>
+        <button class="nav-item" data-view="settings">⚙️ Setting</button>
+        <button class="nav-item" data-view="help">❓ Help</button>
+      </nav>
+
+      <div class="sidebar-art">
+        <div class="moon"></div>
+        <p class="sidebar-quote">“Better notes,<br />Brighter futures”</p>
+      </div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main-wrap">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+        <div class="search-box">
+          <span>🔍</span>
+          <input
+            type="text"
+            id="globalSearch"
+            placeholder="Search notes, topics or seniors..."
+          />
+        </div>
+        <div class="topbar-actions">
+          <div class="notif-wrap">
+            <button class="icon-btn" id="notifBtn" title="Notifications">
+              🔔 <span class="badge-dot" id="notifDot">3</span>
+            </button>
+            <div class="notif-dropdown hidden" id="notifDropdown">
+              <h4>Recent Activity</h4>
+              <ul id="notifList"></ul>
+            </div>
+          </div>
+          <button class="user-btn" id="authTrigger">
+            👤 <span id="topUserName">Tanuj</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Page Content -->
+      <main class="content">
+        <!-- 1. DASHBOARD -->
+        <section class="view active" id="view-dashboard">
+          <div class="dashboard-grid">
+            <div class="dash-left">
+              <!-- Greeting Banner -->
+              <div class="hero-banner">
+                <div>
+                  <h2 id="greetingText">Good Evening, <span class="accent-name">Tanuj!</span></h2>
+                  <p>Find, share and build your knowledge together with your college community.</p>
+                </div>
+                <div class="hero-graphic" aria-hidden="true">
+                  <div class="book b1"></div>
+                  <div class="book b2"></div>
+                  <div class="book b3"></div>
+                </div>
+              </div>
+
+              <!-- 4 Quick Action Cards -->
+              <div class="quick-grid">
+                <div class="quick-card q-blue" onclick="switchView('upload')">
+                  <div class="q-icon">📄</div>
+                  <h3>Upload Notes</h3>
+                  <p>Share your notes <span>→</span></p>
+                </div>
+                <div class="quick-card q-purple" onclick="switchView('explore')">
+                  <div class="q-icon">🔍</div>
+                  <h3>Explore Notes</h3>
+                  <p>Find what you need <span>→</span></p>
+                </div>
+                <div class="quick-card q-green" onclick="switchView('my-notes')">
+                  <div class="q-icon">👥</div>
+                  <h3>My Notes</h3>
+                  <p>Manage your uploads <span>→</span></p>
+                </div>
+                <div class="quick-card q-yellow" onclick="switchView('saved')">
+                  <div class="q-icon">⭐</div>
+                  <h3>Saved Notes</h3>
+                  <p>Access anytime <span>→</span></p>
+                </div>
+              </div>
+
+              <!-- Featured Notes -->
+              <div class="panel">
+                <div class="panel-head">
+                  <h3>✦ Featured Notes</h3>
+                  <button class="link-btn" onclick="switchView('explore')">View all →</button>
+                </div>
+                <div class="notes-grid" id="featuredNotesGrid"></div>
+              </div>
+
+              <!-- Popular Topics -->
+              <div class="panel">
+                <div class="panel-head">
+                  <h3>🔥 Popular Topics</h3>
+                  <button class="link-btn" onclick="switchView('explore')">View all →</button>
+                </div>
+                <div class="topics-wrap" id="popularTopics"></div>
+              </div>
+            </div>
+
+            <!-- Right Rail -->
+            <aside class="dash-right">
+              <div class="panel stats-panel">
+                <div class="stat-row">
+                  <div class="stat-icon s-blue">📄</div>
+                  <div>
+                    <strong id="statNotes">124</strong>
+                    <span>Total Notes</span>
+                  </div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-icon s-green">👥</div>
+                  <div>
+                    <strong id="statContributors">68</strong>
+                    <span>Active Contributors</span>
+                  </div>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-icon s-yellow">⭐</div>
+                  <div>
+                    <strong id="statUsefuls">1.2k</strong>
+                    <span>Total Usefuls</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="panel-head">
+                  <h3>⬆️ Recent Uploads</h3>
+                  <button class="link-btn" onclick="switchView('explore')">View all →</button>
+                </div>
+                <div class="recent-list" id="recentUploadsList"></div>
+              </div>
+
+              <div class="quote-card">
+                <p>Small steps<br />every day<br />lead to big dreams.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- 2. EXPLORE NOTES -->
+        <section class="view" id="view-explore">
+          <div class="page-head">
+            <div>
+              <h2>Explore Academic Resources</h2>
+              <p>Filter by subject, topic, or sort by highest rating and usefulness.</p>
+            </div>
+            <button class="btn-primary" onclick="switchView('upload')">+ Upload Note</button>
+          </div>
+          <div class="filter-bar">
+            <input type="text" id="exploreSearch" placeholder="Filter by title, author, or topic..." />
+            <select id="subjectFilter">
+              <option value="ALL">All Subjects</option>
+              <option value="CSE">CSE</option>
+              <option value="MATHS">MATHS</option>
+              <option value="PHYSICS">PHYSICS</option>
+              <option value="ELECTRONICS">ELECTRONICS</option>
+            </select>
+            <select id="sortFilter">
+              <option value="useful">Most Useful</option>
+              <option value="rating">Highest Rated</option>
+              <option value="newest">Newest First</option>
+            </select>
+          </div>
+          <div class="notes-grid full-grid" id="exploreNotesGrid"></div>
+        </section>
+
+        <!-- 3. UPLOAD NOTES -->
+        <section class="view" id="view-upload">
+          <div class="page-head">
+            <div>
+              <h2>Upload Study Material</h2>
+              <p>Contribute notes, formula sheets, or exam guides for your batch and juniors.</p>
+            </div>
+          </div>
+          <form class="panel form-card" id="uploadForm" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="noteTitle">Resource Title *</label>
+                <input type="text" id="noteTitle" placeholder="e.g., Operating Systems Unit 1-3 Notes" required />
+              </div>
+              <div class="field">
+                <label for="noteSubject">Subject Category *</label>
+                <select id="noteSubject" required>
+                  <option value="">Select Subject</option>
+                  <option value="CSE">CSE</option>
+                  <option value="MATHS">MATHS</option>
+                  <option value="PHYSICS">PHYSICS</option>
+                  <option value="ELECTRONICS">ELECTRONICS</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="noteYear">Author Batch / Year *</label>
+                <select id="noteYear" required>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                  <option value="Alumni">Alumni</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="noteTopic">Topic Tag *</label>
+                <input type="text" id="noteTopic" placeholder="e.g., Data Structures, Calculus" required />
+              </div>
+              <div class="field">
+                <label for="noteFile">Attach File (PDF / DOCX / PPT)</label>
+                <input type="file" id="noteFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" />
+              </div>
+              <div class="field">
+                <label for="noteSize">Approx. File Size (auto-filled if file chosen)</label>
+                <input type="text" id="noteSize" placeholder="e.g., 5 MB" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="noteDesc">Description / Key Topics Covered *</label>
+              <textarea id="noteDesc" rows="4" placeholder="Briefly describe what is inside these notes..." required></textarea>
+            </div>
+            <p class="form-msg" id="uploadMsg"></p>
+            <button type="submit" class="btn-primary">Publish Resource</button>
+          </form>
+        </section>
+
+        <!-- 4. MY NOTES -->
+        <section class="view" id="view-my-notes">
+          <div class="page-head">
+            <div>
+              <h2>My Uploaded Notes</h2>
+              <p>Manage the resources you have shared with the NoteCred community.</p>
+            </div>
+            <button class="btn-primary" onclick="switchView('upload')">+ Upload New</button>
+          </div>
+          <div class="notes-grid full-grid" id="myNotesGrid"></div>
+        </section>
+
+        <!-- 5. SAVED NOTES -->
+        <section class="view" id="view-saved">
+          <div class="page-head">
+            <div>
+              <h2>Saved Notes</h2>
+              <p>Quick access to your bookmarked study materials.</p>
+            </div>
+          </div>
+          <div class="notes-grid full-grid" id="savedNotesGrid"></div>
+        </section>
+
+        <!-- 6. NOTE REQUESTS -->
+        <section class="view" id="view-requests">
+          <div class="page-head">
+            <div>
+              <h2>Note Requests</h2>
+              <p>Request specific notes from seniors or fulfill requests made by juniors.</p>
+            </div>
+          </div>
+          <div class="two-col">
+            <form class="panel form-card" id="requestForm" novalidate>
+              <h3>Request a Resource</h3>
+              <div class="field">
+                <label for="reqTitle">What notes do you need? *</label>
+                <input type="text" id="reqTitle" placeholder="e.g., Discrete Maths PYQs with Solutions" required />
+              </div>
+              <div class="field">
+                <label for="reqSubject">Subject *</label>
+                <select id="reqSubject">
+                  <option value="CSE">CSE</option>
+                  <option value="MATHS">MATHS</option>
+                  <option value="PHYSICS">PHYSICS</option>
+                  <option value="ELECTRONICS">ELECTRONICS</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="reqDetails">Details *</label>
+                <textarea id="reqDetails" rows="3" placeholder="Mention syllabus unit, exam, or professor..." required></textarea>
+              </div>
+              <p class="form-msg" id="reqMsg"></p>
+              <button type="submit" class="btn-primary">Post Request</button>
+            </form>
+            <div class="stack-list" id="requestsList"></div>
+          </div>
+        </section>
+
+        <!-- 7. STUDENT PROJECT REPOSITORY -->
+        <section class="view" id="view-projects">
+          <div class="page-head">
+            <div>
+              <h2>Student Project Repository</h2>
+              <p>Explore past college projects with tech stacks and possible future improvements.</p>
+            </div>
+            <button class="btn-primary" id="toggleProjectFormBtn">+ Submit Project</button>
+          </div>
+
+          <form class="panel form-card hidden" id="projectForm" novalidate>
+            <h3>Add a Past Project</h3>
+            <div class="form-grid">
+              <div class="field">
+                <label for="projTitle">Project Title *</label>
+                <input type="text" id="projTitle" placeholder="e.g., Smart Campus Attendance" required />
+              </div>
+              <div class="field">
+                <label for="projBatch">Batch / Semester *</label>
+                <input type="text" id="projBatch" placeholder="e.g., B.Tech CSE 2025" required />
+              </div>
+              <div class="field">
+                <label for="projTech">Technologies (comma-separated) *</label>
+                <input type="text" id="projTech" placeholder="HTML, CSS, JavaScript, Python" required />
+              </div>
+              <div class="field">
+                <label for="projAuthor">Built By *</label>
+                <input type="text" id="projAuthor" placeholder="Your Name" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="projDesc">Project Description *</label>
+              <textarea id="projDesc" rows="2" required></textarea>
+            </div>
+            <div class="field">
+              <label for="projImprove">Possible Improvements for Next Batch *</label>
+              <textarea id="projImprove" rows="2" placeholder="What can juniors improve or add?" required></textarea>
+            </div>
+            <p class="form-msg" id="projMsg"></p>
+            <button type="submit" class="btn-primary">Save Project</button>
+          </form>
+
+          <div class="projects-grid" id="projectsGrid"></div>
+        </section>
+
+        <!-- 8. SENIOR GUIDANCE -->
+        <section class="view" id="view-guidance">
+          <div class="page-head">
+            <div>
+              <h2>Senior Guidance & Roadmaps</h2>
+              <p>Exam strategies, coding roadmaps, and advice passed down from seniors.</p>
+            </div>
+          </div>
+          <div class="two-col">
+            <form class="panel form-card" id="guidanceForm" novalidate>
+              <h3>Share Guidance</h3>
+              <div class="field">
+                <label for="guideTitle">Advice Topic *</label>
+                <input type="text" id="guideTitle" placeholder="e.g., How to prepare for 1st Sem C Exam" required />
+              </div>
+              <div class="field">
+                <label for="guideCategory">Category</label>
+                <select id="guideCategory">
+                  <option value="Exams">Exams</option>
+                  <option value="Coding">Coding & Projects</option>
+                  <option value="Internships">Internships</option>
+                  <option value="Campus Life">Campus Tips</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="guideBody">Your Advice *</label>
+                <textarea id="guideBody" rows="4" placeholder="Write practical tips for juniors..." required></textarea>
+              </div>
+              <p class="form-msg" id="guideMsg"></p>
+              <button type="submit" class="btn-primary">Post Guidance</button>
+            </form>
+            <div class="stack-list" id="guidanceList"></div>
+          </div>
+        </section>
+
+        <!-- 9. ABOUT -->
+        <section class="view" id="view-about">
+          <div class="panel about-card">
+            <h2>About NoteCred</h2>
+            <p class="lead">
+              <strong>NoteCred</strong> is a Student Academic Resource & Project Sharing Platform designed as one organized place for subject-wise notes, seniors' guidance, and past student projects — a knowledge base that grows with every batch.
+            </p>
+            <div class="about-grid">
+              <div class="about-box">
+                <h3>Core Objectives</h3>
+                <ul>
+                  <li>Central platform to upload, search, and share academic resources.</li>
+                  <li>Let students request notes directly from seniors and peers.</li>
+                  <li>Maintain a repository of previous projects with improvement ideas.</li>
+                  <li>Provide ratings, usefulness votes, and subject categories.</li>
+                  <li>Deliver a clean, responsive experience across all devices.</li>
+                </ul>
+              </div>
+              <div class="about-box">
+                <h3>Project Details</h3>
+                <p><strong>University:</strong> South Asian University (SAU)</p>
+                <p><strong>Program:</strong> B.Tech CSE · Section D</p>
+                <p><strong>Course:</strong> Fundamentals of Web Design</p>
+                <p><strong>Student:</strong> Tanuj Rana (SAU/B.TECH/CSE/FET/035)</p>
+                <p><strong>Submitted To:</strong> Prof. Anand Updhayay</p>
+                <p><strong>Tech Stack:</strong> HTML5, CSS3, Vanilla JavaScript</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. SETTINGS -->
+        <section class="view" id="view-settings">
+          <div class="panel form-card">
+            <h2>Account & Platform Settings</h2>
+            <div class="field">
+              <label for="settingsName">Display Name</label>
+              <input type="text" id="settingsName" />
+            </div>
+            <div class="field">
+              <label for="settingsRoll">University Roll / ID</label>
+              <input type="text" id="settingsRoll" value="SAU/B.TECH/CSE/FET/035" />
+            </div>
+            <div class="btn-row">
+              <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
+              <button class="btn-danger" id="resetDataBtn">Reset Demo Data</button>
+            </div>
+            <p class="form-msg" id="settingsMsg"></p>
+          </div>
+        </section>
+
+        <!-- 11. HELP -->
+        <section class="view" id="view-help">
+          <div class="two-col">
+            <div class="panel">
+              <h2>Frequently Asked Questions</h2>
+              <div class="faq-item">
+                <button class="faq-q">How do I upload notes on NoteCred? <span>+</span></button>
+                <div class="faq-a">Go to "Upload Notes" from the left sidebar, fill in the subject, title, and description, attach a file, and click Publish.</div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q">How do ratings and usefulness work? <span>+</span></button>
+                <div class="faq-a">Click any note card to open its details. You can rate it from 1 to 5 stars, mark it as useful, bookmark it, or leave feedback comments.</div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q">Can I request notes that aren't available yet? <span>+</span></button>
+                <div class="faq-a">Yes! Open the "Note Requests" section, submit your request, and seniors or peers can upvote or fulfill it.</div>
+              </div>
+            </div>
+            <form class="panel form-card" id="helpForm" novalidate>
+              <h3>Contact Support</h3>
+              <div class="field">
+                <label for="helpEmail">Your Email *</label>
+                <input type="email" id="helpEmail" placeholder="student@sau.ac.in" required />
+              </div>
+              <div class="field">
+                <label for="helpMessage">Message *</label>
+                <textarea id="helpMessage" rows="4" placeholder="How can we help?" required></textarea>
+              </div>
+              <p class="form-msg" id="helpMsg"></p>
+              <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- NOTE DETAIL MODAL -->
+  <div class="modal-overlay hidden" id="noteModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeNoteModal">✕</button>
+      <div id="noteModalBody"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN / REGISTER MODAL -->
+  <div class="modal-overlay hidden" id="authModal">
+    <div class="modal-card auth-card">
+      <button class="modal-close" id="closeAuthModal">✕</button>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Register</button>
+      </div>
+
+      <form id="loginForm" class="auth-form" novalidate>
+        <h3>Welcome Back to NoteCred</h3>
+        <div class="field">
+          <label for="loginEmail">College Email *</label>
+          <input type="email" id="loginEmail" placeholder="tanuj@sau.ac.in" required />
+        </div>
+        <div class="field">
+          <label for="loginPass">Password *</label>
+          <input type="password" id="loginPass" placeholder="Min 6 characters" required />
+        </div>
+        <p class="form-msg" id="loginMsg"></p>
+        <button type="submit" class="btn-primary full-w">Login</button>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden" novalidate>
+        <h3>Create Student Account</h3>
+        <div class="field">
+          <label for="regName">Full Name *</label>
+          <input type="text" id="regName" placeholder="Tanuj Rana" required />
+        </div>
+        <div class="field">
+          <label for="regEmail">College Email *</label>
+          <input type="email" id="regEmail" placeholder="student@sau.ac.in" required />
+        </div>
+        <div class="field">
+          <label for="regBatch">Year / Role *</label>
+          <select id="regBatch">
+            <option value="1st Year">1st Year</option>
+            <option value="2nd Year">2nd Year</option>
+            <option value="3rd Year">3rd Year</option>
+            <option value="4th Year">4th Year</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="regPass">Password *</label>
+          <input type="password" id="regPass" placeholder="Min 6 characters" required />
+        </div>
+        <p class="form-msg" id="regMsg"></p>
+        <button type="submit" class="btn-primary full-w">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
